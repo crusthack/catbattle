@@ -1,0 +1,1 @@
+export type theme = "black" | "blue" | "cyan" | "red" | "green";
