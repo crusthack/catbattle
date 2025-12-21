@@ -12,7 +12,7 @@ https://crusthack.github.io/catbattle/
 # 실행 방법
 - npm run start
 # 배포 링크
-[text](https://crusthack.github.io/Neko/)
+[text](https://crusthack.github.io/catbattle/)
 
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
