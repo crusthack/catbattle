@@ -48,7 +48,7 @@ export default function Navigation() {
 
           </div>
           <div>
-            <Link href="https://crusthack.github.io/blogtemp/Web/catbattle" target="_blank" rel="noopener noreferrer" className="ml-6 text-cyan-800 hover:opacity-80">
+            <Link href="https://crusthack.github.io/blog/Web/catbattle" target="_blank" rel="noopener noreferrer" className="ml-6 text-cyan-800 hover:opacity-80">
               웹사이트 설명(블로그)
             </Link>
           </div>

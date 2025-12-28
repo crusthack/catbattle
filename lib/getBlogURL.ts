@@ -24,8 +24,8 @@ export function getBlogLink() {
 
         async function resolveBlogUrl() {
             // 1순위 Blog
-            if (await checkUrl("https://crusthack.github.io/Blog/")) {
-                if (!cancelled) setBlogUrl("https://crusthack.github.io/Blog/");
+            if (await checkUrl("https://crusthack.github.io/blog/")) {
+                if (!cancelled) setBlogUrl("https://crusthack.github.io/blog/");
                 return;
             }
             // 2순위 임시 블로그
