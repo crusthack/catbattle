@@ -15,13 +15,13 @@ export type StageWithMissions = {
 
 interface Props {
     stageEntries: StageWithMissions[];
-    enemies: Enemy[];
+    enemyMap: Map<number, Enemy>;
     onClearStage?: (entry: StageWithMissions) => void;
     setSelectedStage: (s: any) => void;
     setIsDialogOpen: (b: boolean) => void;
 }
 
-export default function RecommendedStages({ stageEntries, enemies, onClearStage, setSelectedStage, setIsDialogOpen }: Props) {
+export default function RecommendedStages({ stageEntries, enemyMap, onClearStage, setSelectedStage, setIsDialogOpen }: Props) {
     return (
         <div className="space-y-6 w-full">
             {stageEntries.filter(se => se.targetEnemies.length > 0).map(se => (
@@ -35,8 +35,8 @@ export default function RecommendedStages({ stageEntries, enemies, onClearStage,
                                 )}
                                 <Badge className={`${se.stage.StoryName === '세계편' ? 'bg-indigo-500' : 'bg-gray-500'}`}>{se.stage.StoryId != 3 ? se.stage.MapId + 1 + '. ' : ''}{se.stage.MapName}</Badge>
                                 <span className={`font-medium`}>{se.stage.StageId + 1}. {se.stage.StageName}</span>
-                                <div className="text-yellow-600">통솔력: {se.stage.Energy}</div>
-                                <div className="text-gray-600">최대출몰시간: {se.maxTimer % 1 === 0 ? (se.maxTimer / 30).toFixed(0) : se.maxTimer.toFixed(1)}초</div>
+                                <div className="text-yellow-600 dark:text-yellow-400">통솔력: {se.stage.Energy}</div>
+                                <div className="text-gray-600 dark:text-gray-300">최대출몰시간: {se.maxTimer % 1 === 0 ? (se.maxTimer / 30).toFixed(0) : se.maxTimer.toFixed(1)}초</div>
 
                                 {onClearStage && (
                                     <Badge asChild variant="destructive" className="w-20 ml-auto transition-colors hover:bg-red-700/90">
@@ -56,7 +56,7 @@ export default function RecommendedStages({ stageEntries, enemies, onClearStage,
                                     });
 
                                     return unique.map((enemySpawnData: StageEnemySpawnData, idx) => {
-                                        const en = enemies.find(e => e.Id === enemySpawnData.enemyId);
+                                        const en = enemyMap.get(enemySpawnData.enemyId);
                                         if (!en) return null;
                                         if (en.Id === 23) return null; // skip rendering for enemy id 23
 
@@ -91,16 +91,16 @@ export default function RecommendedStages({ stageEntries, enemies, onClearStage,
                                                     <img
                                                         src={en.Image}
                                                         alt={en.Name ?? 'enemy'}
-                                                        className={`w-full h-full object-contain rounded bg-white ${isTarget ? 'ring-2 ring-red-500' : ''
+                                                        className={`w-full h-full object-contain rounded bg-white dark:bg-gray-700 ${isTarget ? 'ring-2 ring-red-500' : ''
                                                             }`}
                                                     />
                                                 ) : (
-                                                    <div className="w-full h-full bg-gray-100 flex items-center justify-center rounded text-xs text-gray-400">
+                                                    <div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center rounded text-xs text-gray-400 dark:text-gray-500">
                                                         No
                                                     </div>
                                                 )}
 
-                                                <div className="text-xs text-gray-600 mt-1 text-center">
+                                                <div className="text-xs text-gray-600 dark:text-gray-300 mt-1 text-center">
                                                     <div>
                                                         <span className={isTarget ? 'font-bold' : undefined}>
                                                             성체력: {hpPercent}%

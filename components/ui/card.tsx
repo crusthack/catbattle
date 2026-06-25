@@ -10,27 +10,24 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   color?: theme;
 }
 
-// variant별 스타일 정의
 const variantStyles = {
-  default: "bg-white shadow-md hover:shadow-lg",
-  outlined: "bg-white border border-gray-200 hover:border-gray-300",
-  elevated: "bg-white shadow-lg hover:shadow-xl",
+  default: "bg-white dark:bg-gray-800 shadow-md hover:shadow-lg",
+  outlined: "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600",
+  elevated: "bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl",
 };
 
-// padding별 스타일 정의
 const paddingStyles = {
-  sm: "p-4", // 작은 여백 (1rem)
-  md: "p-6", // 중간 여백 (1.5rem)
-  lg: "p-8", // 큰 여백 (2rem)
-};  
+  sm: "p-4",
+  md: "p-6",
+  lg: "p-8",
+};
 
 const borderColors = {
-  black: "border-black-200",
-  blue: "border-blue-200",
-  red: "border-red-200",
-  green: "border-green-200",
-  cyan: "border-cyan-200",
-  
+  black: "border-black-200 dark:border-gray-600",
+  blue: "border-blue-200 dark:border-blue-800",
+  red: "border-red-200 dark:border-red-800",
+  green: "border-green-200 dark:border-green-800",
+  cyan: "border-cyan-200 dark:border-cyan-800",
 }
 
 export default function Card({

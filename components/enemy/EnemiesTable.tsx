@@ -44,16 +44,16 @@ export default function EnemiesTable({
       displayedEnemies.map((enemy) => (
         <TableRow
           key={`${enemy.Id}`}
-          className="cursor-pointer hover:bg-gray-50"
+          className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50"
           onClick={() => onSelect(enemy)}
         >
           <TableCell className="text-center">{enemy.Id}</TableCell>
 
           <TableCell>
             {enemy.Image ? (
-              <img src={enemy.Image} alt={enemy.Name} className="w-14 w-full h-14 object-contain rounded bg-white" />
+              <img src={enemy.Image} alt={enemy.Name} className="w-14 w-full h-14 object-contain rounded bg-white dark:bg-gray-700" />
             ) : (
-              <div className="w-14 h-14 bg-gray-100 flex items-center justify-center rounded text-xs text-gray-400">No</div>
+              <div className="w-14 h-14 bg-gray-100 dark:bg-gray-700 flex items-center justify-center rounded text-xs text-gray-400 dark:text-gray-500">No</div>
             )}
           </TableCell>
 

@@ -74,7 +74,7 @@ export default function CatsTable({
       displayedCats.map((cat) => (
         <TableRow
           key={`${cat.Id}-${cat.Form}`}
-          className="cursor-pointer hover:bg-gray-50"
+          className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50"
           onClick={() => onSelect(cat)}
         >
           <TableCell className="text-center">{cat.Id}</TableCell>
@@ -84,10 +84,10 @@ export default function CatsTable({
               <img
                 src={cat.Image}
                 alt={cat.Name}
-                className="w-14 w-full h-14 object-contain rounded bg-white"
+                className="w-14 w-full h-14 object-contain rounded bg-white dark:bg-gray-700"
               />
             ) : (
-              <div className="w-14 h-14 bg-gray-100 flex items-center justify-center rounded text-xs text-gray-400">No</div>
+              <div className="w-14 h-14 bg-gray-100 dark:bg-gray-700 flex items-center justify-center rounded text-xs text-gray-400 dark:text-gray-500">No</div>
             )}
           </TableCell>
 

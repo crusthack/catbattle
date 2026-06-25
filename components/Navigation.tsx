@@ -2,13 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Cat, Dog, Map, Calendar, Home, ChartColumn, Icon } from "lucide-react";
+import { Cat, Dog, Map, Calendar, Home, ChartColumn, Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button";
 import { getBlogLink } from "@/lib/getBlogURL";
+import { useTheme } from "@/components/ThemeProvider";
 
 export default function Navigation() {
   const pathname = usePathname();
   const { blogUrl, loading } = getBlogLink();
+  const { theme, toggle } = useTheme();
+
   const pages = [
     { id: "/", label: "홈", icon: Home },
     { id: "/cat", label: "아군 캐릭터", icon: Cat },
@@ -19,7 +22,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="border-b bg-white sticky top-0 z-10">
+    <nav className="border-b bg-white dark:bg-gray-900 dark:border-gray-700 sticky top-0 z-10">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-2 py-4">
           <Link href="/" className="flex items-center gap-2 mr-6">
@@ -45,10 +48,10 @@ export default function Navigation() {
                 </Link>
               );
             })}
-
           </div>
+
           <div>
-            <Link href="https://crusthack.github.io/blog/Web/catbattle" target="_blank" rel="noopener noreferrer" className="ml-6 text-cyan-800 hover:opacity-80">
+            <Link href="https://crusthack.github.io/blog/Web/catbattle" target="_blank" rel="noopener noreferrer" className="ml-6 text-cyan-800 dark:text-cyan-400 hover:opacity-80">
               웹사이트 설명(블로그)
             </Link>
           </div>
@@ -57,18 +60,27 @@ export default function Navigation() {
             {loading ? (
               <>
                 <LoadingSpinner />
-                <span className="text-sm text-gray-400">블로그 확인 중…</span>
+                <span className="text-sm text-gray-400 dark:text-gray-500">블로그 확인 중…</span>
               </>
             ) : (
               <Link
                 href={blogUrl!}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-cyan-800 hover:opacity-80"
+                className="text-cyan-800 dark:text-cyan-400 hover:opacity-80"
               >
                 개발자 블로그 가기
               </Link>
             )}
+            <button
+              onClick={toggle}
+              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              aria-label="테마 전환"
+            >
+              {theme === "dark"
+                ? <Sun className="w-4 h-4 text-yellow-400" />
+                : <Moon className="w-4 h-4 text-gray-600" />}
+            </button>
           </div>
         </div>
       </div>

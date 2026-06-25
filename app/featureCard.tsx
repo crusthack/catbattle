@@ -40,7 +40,7 @@ export default function FeatureCard({
                     <Icon icon={icon} color={color}/>
                     <div>
                         <h3 className={getTitleColor(color)}>{title}</h3>
-                        <p className="text-gray-600">{description}</p>
+                        <p className="text-gray-600 dark:text-gray-400">{description}</p>
                     </div>
                     <Button color={color} className="w-full gap-2">
                         {buttonText}

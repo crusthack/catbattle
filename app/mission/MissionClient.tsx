@@ -46,8 +46,11 @@ export default function MissionClient({ enemies, stages }: Props) {
     const mapTypes = ["세계편", "미래편", "우주편", "레전드"];
     const stars = [1, 2, 3, 4];
 
-    const getEnemyById = (id: number | null): Enemy | null => (id == null ? null : enemies.find((e) => e.Id === id) || null);
-    const getEnemyByName = (name: string): Enemy | null => enemies.find((e) => e.Name === name) || null;
+    const enemyMap = useMemo(() => new Map(enemies.map((e) => [e.Id, e])), [enemies]);
+    const enemyNameMap = useMemo(() => new Map(enemies.map((e) => [e.Name, e])), [enemies]);
+
+    const getEnemyById = (id: number | null): Enemy | null => (id == null ? null : enemyMap.get(id) ?? null);
+    const getEnemyByName = (name: string): Enemy | null => enemyNameMap.get(name) ?? null;
 
     const getAttributeColorFromEnemy = (enemy?: Enemy | null) => {
         if (!enemy) return "text-gray-700";
@@ -69,7 +72,7 @@ export default function MissionClient({ enemies, stages }: Props) {
 
     const isLegendStage = (stage?: Stage | null) => {
         if (!stage) return false;
-        return [0, 13, 34].includes(stage.StoryId);
+        return stage.StoryId === 0;
     };
 
     useEffect(() => {
@@ -115,8 +118,6 @@ export default function MissionClient({ enemies, stages }: Props) {
                     case 8: return '우주편';
                 }
             case 0:
-            case 13:
-            case 34:
                 return '레전드'
         }
         return 'etc';
@@ -128,7 +129,7 @@ export default function MissionClient({ enemies, stages }: Props) {
         if (stage.StoryId === 3 && stage.MapId === 9) return 0; // 세계편
         if (stage.StoryId === 3 && (stage.MapId === 3 || stage.MapId === 4 || stage.MapId === 5)) return 1 + stage.MapId % 3; // 미래편
         if (stage.StoryId === 3 && (stage.MapId === 6 || stage.MapId === 7 || stage.MapId === 8)) return 4 + stage.MapId % 3; // 우주편
-        if ([0, 13, 34].includes(stage.StoryId)) return 7; // 레전드
+        if (stage.StoryId === 0) return 7; // 레전드
         return 10; // others
     }
 
@@ -157,49 +158,30 @@ export default function MissionClient({ enemies, stages }: Props) {
         for (const m of missions) {
             const mapType = m.mapType;
             const targetStages = map.get(mapType);
-            if (!targetStages) {
-                console.log("asdasdasd");
-                continue;
-            }
+            if (!targetStages) continue;
 
-                for (const entry of targetStages) {
+            for (const entry of targetStages) {
                 const stage = entry.stage;
-                    // If this entry is star-specific (legend), only match missions of same star
-                    if (entry.star != null && m.star !== entry.star) continue;
-                // Restrict to the specific chapter map based on mission star for 미래편/우주편
+                if (entry.star != null && m.star !== entry.star) continue;
                 if (mapType === '미래편') {
-                    // 미래편: 1성 -> MapId 3, 2성 -> 4, 3성 -> 5
                     const requiredMapId = 2 + (m.star || 1);
                     if (stage.MapId !== requiredMapId) continue;
                 }
                 if (mapType === '우주편') {
-                    // 우주편: 1성 -> MapId 6, 2성 -> 7, 3성 -> 8
                     const requiredMapId = 5 + (m.star || 1);
                     if (stage.MapId !== requiredMapId) continue;
                 }
                 const enemySpawns = stage.EnemiesData || [];
-                for(const spawnData of enemySpawns){ 
-                    if(spawnData.enemyId === m.enemyId){
-                        // only add if not already present
-                        if (!entry.targetEnemies.includes(spawnData.enemyId)) {
-                            entry.targetEnemies.push(spawnData.enemyId);
-
-                            const targetEnemyData = stage.EnemiesData.filter(s => s.enemyId === spawnData.enemyId);
-                            targetEnemyData.sort((a, b) => {
-                                if (a.timer !== b.timer) {
-                                    return (a.timer || 0) - (b.timer || 0);
-                                }
-                                return (b.castleHp || 0) - (a.castleHp || 0);
-                            });
-                            if(targetEnemyData.length > 0){
-                                const firstSpawn = targetEnemyData[0];
-                                entry.maxTimer = Math.max(firstSpawn.timer, entry.maxTimer);
-                            }
-                        }
-                    }
+                // skip if already matched or enemy not in this stage
+                if (entry.targetEnemies.includes(m.enemyId)) continue;
+                let minTimer = Infinity;
+                for (const s of enemySpawns) {
+                    if (s.enemyId === m.enemyId && s.timer < minTimer) minTimer = s.timer;
                 }
-                const enemy = getEnemyByName(m.enemyName);
-                if (!enemy) continue;
+                if (minTimer !== Infinity) {
+                    entry.targetEnemies.push(m.enemyId);
+                    entry.maxTimer = Math.max(minTimer, entry.maxTimer);
+                }
             }
         }
         const entries: StageWithMissions[] = [];
@@ -228,8 +210,6 @@ export default function MissionClient({ enemies, stages }: Props) {
             if (a.maxTimer !== b.maxTimer) return a.maxTimer - b.maxTimer;
             return a.stage.StageId - b.stage.StageId;
         });
-        console.log(entries);
-
         return entries;
     }, [missions, stages, sortBy]);
 
@@ -292,12 +272,12 @@ export default function MissionClient({ enemies, stages }: Props) {
                         </div>
 
                         {missions.length === 0 ? (
-                            <div className="text-center py-12 text-gray-500">
+                            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                                 <Target className="w-12 h-12 mx-auto mb-3 opacity-30" />
                                 <p>미션을 추가하면 추천 스테이지가 표시됩니다</p>
                             </div>
                         ) : (
-                            <RecommendedStages stageEntries={stageEntries} enemies={enemies} onClearStage={clearMissionsForStage} setSelectedStage={(s:any)=>{setSelectedStage(s); setIsDialogOpen(true);}} setIsDialogOpen={setIsDialogOpen}/>
+                            <RecommendedStages stageEntries={stageEntries} enemyMap={enemyMap} onClearStage={clearMissionsForStage} setSelectedStage={(s:any)=>{setSelectedStage(s); setIsDialogOpen(true);}} setIsDialogOpen={setIsDialogOpen}/>
                         )}
                     </Card>
                 </div>

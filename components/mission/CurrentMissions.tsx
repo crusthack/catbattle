@@ -18,7 +18,7 @@ export default function CurrentMissions({ missions, removeMission, clearAll }: P
       <h3 className="text-indigo-600 mb-4">현재 미션</h3>
 
       {missions.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
           <Plus className="w-8 h-8 mx-auto mb-2 opacity-30" />
           <p className="text-sm">추가된 미션이 없습니다</p>
         </div>
