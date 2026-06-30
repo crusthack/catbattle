@@ -63,6 +63,9 @@ export default function MissionAdd(props: Props) {
   // find the selected enemy object for display
   const selectedEnemyObj = selectedEnemy != null ? enemies.find((e: any) => e.Id === selectedEnemy) : null;
 
+  const normalizeName = (str: string) =>
+    str.replace(/\s+/g, "").toLowerCase();
+
   return (
     <Card className="p-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20">
       <div className="flex items-start w-full gap-6">
@@ -108,10 +111,11 @@ export default function MissionAdd(props: Props) {
                       onValueChange={setSearchQuery}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          const q = searchQuery.trim().toLowerCase();
+                          const q = normalizeName(searchQuery.trim());
                           if (!q) return;
-                          const found = enemies.find((en: any) => en.Name?.toLowerCase() === q)
-                            ?? enemies.find((en: any) => en.Name?.toLowerCase().includes(q));
+                          const found =
+                            enemies.find((en: any) => normalizeName(en.Name ?? "") === q) ??
+                            enemies.find((en: any) => normalizeName(en.Name ?? "").includes(q));
                           if (found) {
                             setSelectedEnemy(found.Id);
                             handlePopoverChange(false);
