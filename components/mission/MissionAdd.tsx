@@ -39,11 +39,15 @@ export default function MissionAdd(props: Props) {
   const addButtonRef = React.useRef<HTMLButtonElement | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
+  
+  const normalizeName = (str: string) =>
+    str.replace(/\s+/g, "").toLowerCase();
+
   // 검색어로 필터링 후 최대 100건만 렌더링 (전체 목록 DOM 마운트 방지)
   const filteredEnemies = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
+    const q = normalizeName(searchQuery.trim().toLowerCase());
     if (!q) return enemies.slice(0, 100);
-    return enemies.filter((e: any) => e.Name.toLowerCase().includes(q)).slice(0, 100);
+    return enemies.filter((e: any) => normalizeName(e.Name.toLowerCase()).includes(q)).slice(0, 100);
   }, [enemies, searchQuery]);
 
   const handlePopoverChange = (open: boolean) => {
@@ -63,8 +67,6 @@ export default function MissionAdd(props: Props) {
   // find the selected enemy object for display
   const selectedEnemyObj = selectedEnemy != null ? enemies.find((e: any) => e.Id === selectedEnemy) : null;
 
-  const normalizeName = (str: string) =>
-    str.replace(/\s+/g, "").toLowerCase();
 
   return (
     <Card className="p-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/20 dark:to-purple-950/20">
