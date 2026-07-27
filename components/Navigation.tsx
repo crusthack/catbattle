@@ -4,12 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Cat, Dog, Map, Calendar, Home, ChartColumn, Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button";
-import { getBlogLink } from "@/lib/getBlogURL";
 import { useTheme } from "@/components/ThemeProvider";
 
 export default function Navigation() {
   const pathname = usePathname();
-  const { blogUrl, loading } = getBlogLink();
   const { theme, toggle } = useTheme();
 
   const pages = [
@@ -50,28 +48,7 @@ export default function Navigation() {
             })}
           </div>
 
-          <div>
-            <Link href="https://crusthack.github.io/blog/Web/catbattle" target="_blank" rel="noopener noreferrer" className="ml-6 text-cyan-800 dark:text-cyan-400 hover:opacity-80">
-              웹사이트 설명(블로그)
-            </Link>
-          </div>
-
           <div className="ml-auto flex items-center gap-2">
-            {loading ? (
-              <>
-                <LoadingSpinner />
-                <span className="text-sm text-gray-400 dark:text-gray-500">블로그 확인 중…</span>
-              </>
-            ) : (
-              <Link
-                href={blogUrl!}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-cyan-800 dark:text-cyan-400 hover:opacity-80"
-              >
-                개발자 블로그 가기
-              </Link>
-            )}
             <button
               onClick={toggle}
               className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
@@ -85,11 +62,5 @@ export default function Navigation() {
         </div>
       </div>
     </nav>
-  );
-}
-
-function LoadingSpinner() {
-  return (
-    <div className="w-4 h-4 border-2 border-cyan-600 border-t-transparent rounded-full animate-spin" />
   );
 }

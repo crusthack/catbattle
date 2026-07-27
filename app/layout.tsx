@@ -16,9 +16,6 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    icons:{
-      icon: "https://i.namu.wiki/i/M6AE8KgdUiL4hPvu8foaiuoQhAg4irefljwcQwO6AMrLqF3N1g-x9fov0mU6Q4wwTeeepQzVT-yw4_qUs_0pfYaxE69UzDs6tbU9riaYER2lvO_nHhxzKNssBW1ZbE7JcZW4SIT4jaup6K8P2kk7hQ.webp"
-  },
   title: "냥코대전쟁 DB",
   description: "냥코대전쟁 데이터 조회 사이트",
 };
@@ -29,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(t==null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})();` }} />
       </head>
